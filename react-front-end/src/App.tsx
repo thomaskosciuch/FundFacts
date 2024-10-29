@@ -20,9 +20,9 @@ const App: React.FC = () => {
         {isAuthorized !== null && (
           <p>
             {isAuthorized ? (
-              <p>You are authorized</p>
+              <div>You are authorized</div>
             ) : (
-              <p>You are not authorized</p>
+              <div>You are not authorized</div>
             )}
           </p>
         )}

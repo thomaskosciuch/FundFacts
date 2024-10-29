@@ -11,7 +11,6 @@ CORS(app)
 @app.route('/authorization')
 @login_required
 def index():
-    
     return jsonify(session['user_info']), 200
 
 

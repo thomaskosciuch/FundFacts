@@ -16,6 +16,8 @@ const Authorization: React.FC<AuthorizationProps> = ({ accessToken, setIsAuthori
               Authorization: `Bearer ${accessToken}`,
             },
           });
+          console.log(response)
+          console.log(response.status)
           if (response.status === 200) {
             setIsAuthorized(true);
           } else {

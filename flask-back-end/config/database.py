@@ -54,7 +54,6 @@ def create_database_if_not_exists():
     )
     engine = create_engine(uri_without_db)
     try:
-        # Check if the database exists
         with engine.connect() as conn:
             conn.execute(
                 text(f"CREATE DATABASE IF NOT EXISTS `{database_secret['database']}`"))

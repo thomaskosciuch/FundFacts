@@ -7,7 +7,10 @@ const App: React.FC = () => {
   const [accessToken, setAccessToken] = useState<string | null>(null);
 
   const login = () => {
-    instance.loginRedirect();
+    const thing = instance.loginRedirect();
+    console.log(thing);
+    console.log(accounts);
+    console.log(instance);
   };
 
   useEffect(() => {
@@ -28,15 +31,46 @@ const App: React.FC = () => {
           }
         });
     } else if (accounts.length === 0 && inProgress === "none") {
-      login(); // Automatically trigger login if no accounts found
+      login();
     }
   }, [accounts, inProgress, instance]);
+
+  useEffect(() => {
+    console.log("accounts", accounts);
+    if (accounts.length) {
+      const headers = new Headers();
+      headers.append("Authorization", `Bearer ${accounts[0]?.idToken}`);
+      headers.append("Instance-ClientId", instance?.clientId || "");
+      headers.append("Instance-Authority", instance?.authority || "");
+      // Send the GET request
+      fetch("http://127.0.0.1:5000/", {
+        method: "GET",
+        headers: headers,
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          console.log("Response data:", data);
+        })
+        .catch((error) => {
+          console.error("Fetch error:", error);
+        });
+    }
+  }, [accessToken, instance]);
 
   return (
     <div className="App">
       <h1>Welcome to the App</h1>
       {accessToken ? (
-        <p>Access Token: {accessToken}</p>
+        <p>
+          Site Access Token: {accessToken}
+          User Access Token: {accounts[0]?.idToken}
+          <button onClick={login}>Log In</button>
+        </p>
       ) : (
         <button onClick={login}>Log In</button>
       )}

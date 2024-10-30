@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { backendUrl } from "../constants";
 
 interface AuthorizationProps {
   accessToken: string | null;
@@ -9,18 +10,19 @@ const Authorization: React.FC<AuthorizationProps> = ({ accessToken, setIsAuthori
   useEffect(() => {
     const checkAuthorization = async () => {
       if (accessToken) {
+        console.log(`Bearer ${accessToken}`)
         try {
-          const response = await fetch("http://127.0.0.1:5000/authorization", {
+          const response = await fetch(`${backendUrl}/authorization/`, {
             method: "GET",
             headers: {
               Authorization: `Bearer ${accessToken}`,
             },
           });
-          console.log(response)
-          console.log(response.status)
           if (response.status === 200) {
+            console.log('is ok')
             setIsAuthorized(true);
           } else {
+            console.log('is not ok - other status')
             setIsAuthorized(false);
           }
         } catch (error) {
@@ -28,6 +30,7 @@ const Authorization: React.FC<AuthorizationProps> = ({ accessToken, setIsAuthori
           setIsAuthorized(false);
         }
       } else {
+        console.log('no auth')
         setIsAuthorized(null);
       }
     };
